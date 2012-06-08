@@ -31,6 +31,10 @@ images taken under these constrained circumstances. We propose an automated appr
 correcting this perspective distortion, even for uncalibrated images of documents
 with irregular page edges containing no regular text.
 
+\section{Background}
+
+Details about imaging here.
+
 \section{Related Work}
 
 Numerous work exists for performing document perspective correction by exploiting the presence of
@@ -44,9 +48,23 @@ perform the perspective correction. An advantage to this is that it can handle �
 consisting only of images or haphazard writing. In addition, because the manuscript pages we are dealing with have
 cockled, uneven edges, our boundary detection needs to be relatively robust to the “noise” of these uneven edges.
 
-\cite{Bukhari:2009tc}
-
 \section{Perspective Correction Algorithm}
+
+The perspective correction algorithm functions by applying a few steps in sequence:
+
+\begin{enumerate}
+  \item Foreground/background segmentation.
+  \item Canny edge detection followed by dilation to turn the mask image into a line image.
+  \item Hough line detection to detect lines.
+  \item Line classification to classify the detected lines as “top” or “bottom” page edge lines.
+  \item Line averaging to find the “average” line for the top and bottom edge lines.
+  \item Compute homography for transforming the slanted top and bottom page lines into straight lines.
+  \item Application of the resulting perspective warp.
+\end{enumerate}
+
+For our images, most were made with a fairly consistent backdrop, so the foreground/background segmentation operates by performing a flood fill on the corners of a gaussian-smoothed version of the image. This exploits the assumption that the page will not fill the full image all the way around, as in such a case, our perspective correction would likely be unable to accurately detect all the page edges which it uses to compute homography.
+
+This gives us a mask image as seen in figure (figure ref here). Since we want to use Hough line detection, we first need to transform the mask edges into lines, which we do using a Canny edge detector and dilation, the results of which can be seen in figure (figure ref here).
 
 \section{Results}
 
