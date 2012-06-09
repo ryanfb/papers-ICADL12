@@ -52,7 +52,7 @@ cockled, uneven edges, our boundary detection needs to be relatively robust to t
 
 The perspective correction algorithm functions by applying a few steps in sequence:
 
-\begin{enumerate}
+\begin{itemize}
   \item Foreground/background segmentation.
   \item Canny edge detection followed by dilation to turn the mask image into a line image.
   \item Hough line detection to detect lines.
@@ -60,11 +60,15 @@ The perspective correction algorithm functions by applying a few steps in sequen
   \item Line averaging to find the “average” line for the top and bottom edge lines.
   \item Compute homography for transforming the slanted top and bottom page lines into straight lines.
   \item Application of the resulting perspective warp.
-\end{enumerate}
+\end{itemize}
 
 For our images, most were made with a fairly consistent backdrop, so the foreground/background segmentation operates by performing a flood fill on the corners of a gaussian-smoothed version of the image. This exploits the assumption that the page will not fill the full image all the way around, as in such a case, our perspective correction would likely be unable to accurately detect all the page edges which it uses to compute homography.
 
 This gives us a mask image as seen in figure (figure ref here). Since we want to use Hough line detection, we first need to transform the mask edges into lines, which we do using a Canny edge detector and dilation, the results of which can be seen in figure (figure ref here).
+
+We can then perform Hough line detection, using a probabilistic Hough transform which gives us line segments for every line detected in the image. We classify these lines as belonging to either the “top” or “bottom” of the page by seeing which half of the image height the start and end points are in, and restricting it to only lines with a $\pm 45\,^{\circ}$ angle. This also filters out edges detected along the left and right side of the page.
+
+We can then average these lines to get the average “line” for the top and bottom page edges. We extend these lines to the image edges, and construct a quadrilateral matrix using them for the top and bottom. We then compute a destination quadrilateral matrix using the assumption that the top edge should be “brought up” to the highest point to form a straight line, and similarly for the bottom edge being brought down, forming a rectangle. We can then use these two quads to compute a perspective transform which will warp our source quadrilateral into our destination rectangle. We then apply the resulting perspective warp to the whole image, resulting in a dewarped image.
 
 \section{Results}
 
