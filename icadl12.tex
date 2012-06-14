@@ -38,7 +38,18 @@ with irregular page edges containing no regular text.
 
 \section{Background}
 
-Details about imaging here.
+In November of 2011, C. Blackwell and A. Hackney Blackwell photographed the botanical specimens collected in the Sloane Herbarium of the Natural History Museum, London. This was a “digitization project of opportunity”. Blackwell and Hackney Blackwell were in London working on another project, and were able to negotiate permission for this digitization at the last minute; the botanical images would complement their work on digital codicology (Blackwell) and environmental science and herbarium collections (Hackney Blackwell). The pair had one and a half working days to take as many images as possible. They had a portable conservation copystand, a tripod, and two digital cameras; the working space at the Museum was small, with limited working surfaces. The botanical specimens are pasted onto the pages of large quarto- or folio-sized volumes. An initial process of triage divided the volumes into one group that would fit on the copystand, and one group that were too large. The former were photographed with a Nikon D700 camera mounted in good alignment on the copystand, which included lightbars for even illumination. The other volumes presented a challenge.
+
+\begin{figure}[!htbm]
+  \includegraphics[width=\textwidth]{figures/original.jpg}
+  \caption{Sample original image}\label{fig:original}
+\end{figure}
+
+\clearpage
+
+These were photographed with a Nikon D3x camera on a tripod; the volumes were supported by foam wedges. The tripod was weighted with exercise weights for stability, and the book, tripod, and camera were situated on an L-shaped bench. There was limited time to experiment, but the team devised an arrangement that resulted in sufficient light, good safety for the volumes being photographed, but less-than-ideal alignment of camera to page. Knowing that this alignment was imperfect, the team elected to use the camera with the higher resolution (the D3x) for these, in the hope that the greater resolution would afford greater potential for post-processing the images.
+
+The team captured over 1,800 images in the time allotted. These books had never been photographed, and having digital access (under an Open Content License) to these 300-year-old botanical specimens is invaluable. Nevertheless, the inevitable misalignment of the images of some of the volumes is regrettable. It in no way precludes identification and study of the plant specimens, but does preclude the finest level of comparative measurement. This project resulted in a quantity of data that would not otherwise exist, but whose quality stands in need of enhancement.
 
 \section{Related Work}
 
@@ -46,6 +57,7 @@ Numerous work exists for performing document perspective correction by exploitin
 common text features, such as linear text baselines in printed texts.
 As a result, many of these techniques need to be tweaked depending upon morphological features of
 the written language of the document in question.
+Other techniques use extensive calibration and data acquisition to correct for geometric distortion \cite{Brown:2007ti,LiZhang:2008bp}.
 However, for our documents,
 many pages had no such features, consisting only of handwritten text and physical plant
 specimens. As a result, our approach is fairly unique in that it uses only physical page boundaries to
@@ -56,11 +68,6 @@ cockled, uneven edges, our boundary detection needs to be relatively robust to t
 \section{Perspective Correction Algorithm}
 
 The perspective correction algorithm functions by applying a few steps in sequence:
-
-\begin{figure}[htbm]
-  \includegraphics[width=\textwidth]{figures/original.jpg}
-  \caption{Original image}\label{fig:original}
-\end{figure}
 
 \begin{figure}[htbm]
   \subfloat[Masked image]{
@@ -105,11 +112,11 @@ The perspective correction algorithm functions by applying a few steps in sequen
 
 For our images, most were made with a fairly consistent backdrop, so the foreground/background segmentation operates by performing a flood fill on the corners of a gaussian-smoothed version of the image. This exploits the assumption that the page will not fill the full image all the way around, as in such a case, our perspective correction would likely be unable to accurately detect all the page edges which it uses to compute homography. We then remove blobs whose area is less then half the image, as we assume the page still makes up most of the image. 
 
-This gives us a mask image as seen in figure (figure ref here). Since we want to use Hough line detection, we first need to transform the mask edges into lines, which we do using a Canny edge detector and dilation, the results of which can be seen in figure (figure ref here).
+This gives us a mask image as seen in Figure \ref{fig:masked}. Since we want to use Hough line detection, we first need to transform the mask edges into lines, which we do using a Canny edge detector and dilation, the results of which can be seen in Figure \ref{fig:canny}.
 
 We can then perform Hough line detection, using a probabilistic Hough transform which gives us line segments for every line detected in the image. We classify these lines as belonging to either the “top” or “bottom” of the page by seeing which half of the image height the start and end points are in, and restricting it to only lines with a $\pm 45\,^{\circ}$ angle. This also filters out edges detected along the left and right side of the page.
 
-We can then average these lines to get the average “line” for the top and bottom page edges. We extend these lines to the image edges, and construct a quadrilateral matrix using them for the top and bottom. We then compute a destination quadrilateral matrix using the assumption that the top edge should be “brought up” to the highest point to form a straight line (while maintaining line length), and similarly for the bottom edge being brought down, forming a rectangle. We can then use these two quads to compute a perspective transform which will warp our source quadrilateral into our destination rectangle. We then apply the resulting perspective warp to the whole image, resulting in a dewarped image.
+We can then average these lines to get the average “line” for the top and bottom page edges. We extend these lines to the image edges, and construct a quadrilateral matrix using them for the top and bottom. We then compute a destination quadrilateral matrix using the assumption that the top edge should be “brought up” to the highest point to form a straight line (while maintaining line length), and similarly for the bottom edge being brought down, forming a rectangle. We can then use these two quads to compute a perspective transform which will warp our source quadrilateral into our destination rectangle. We then apply the resulting perspective warp to the whole image, resulting in a dewarped image, as seen in Figure \ref{fig:unwarped}.
 
 \section{Results}
 
