@@ -54,13 +54,17 @@ The team captured over 1,800 images in the time allotted. These books had never 
 \section{Related Work}
 
 Numerous work exists for performing document perspective correction by exploiting the presence of
-common text features, such as linear text baselines in printed texts.
+common text features, such as linear text baselines in printed texts
+\cite{Clark:2001vj,Clark:2002wk,Clark:2003wf,Cao:2003bh,Lu:2003jy,Zhang:2005dy,Monnier:2005jj,Liang:2005hc,Ulges:2005ju,Ezaki:2005jc,Pollard:2005bp,Lu:2005ih,Avila:2005jx,Zhang:2008kj,JianLiang:2008ew,Bukhari:2009tc,Beusekom:2010dg,Luo:2011go,Rahnemoonfar:2011ux,Golpardaz:2011dz,Yang:2011dt}.
 As a result, many of these techniques need to be tweaked depending upon morphological features of
 the written language of the document in question.
-Other techniques use extensive calibration and data acquisition to correct for geometric distortion \cite{Brown:2007ti,LiZhang:2008bp}.
 However, for our documents,
 many pages had no such features, consisting only of handwritten text and physical plant
-specimens. As a result, our approach is fairly unique in that it uses only physical page boundaries to
+specimens.
+Other techniques use extensive calibration and data acquisition to correct for geometric distortion 
+\cite{Pilu:vr,Brown:2001td,Brown:2004vl,Brown:2005uy,Brown:2007ti,LiZhang:2008bp}.
+However, as detailed above, there was not sufficient time to perform this sort of data acquisition.
+As a result, our approach is fairly unique in that it uses only physical page boundaries to of uncalibrated images
 perform the perspective correction. An advantage to this is that it can handle “blank” pages or pages
 consisting only of images or haphazard writing. In addition, because the manuscript pages we are dealing with have
 cockled, uneven edges, our boundary detection needs to be relatively robust to the “noise” of these uneven edges.
