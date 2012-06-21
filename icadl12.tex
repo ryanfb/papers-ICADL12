@@ -41,11 +41,11 @@ with irregular page edges containing no regular text.
 In November of 2011, C. Blackwell and A. Hackney Blackwell photographed the botanical specimens collected in the Sloane Herbarium of the Natural History Museum, London. This was a “digitization project of opportunity”. Blackwell and Hackney Blackwell were in London working on another project, and were able to negotiate permission for this digitization at the last minute; the botanical images would complement their work on digital codicology (Blackwell) and environmental science and herbarium collections (Hackney Blackwell). The pair had one and a half working days to take as many images as possible. They had a portable conservation copystand, a tripod, and two digital cameras; the working space at the Museum was small, with limited working surfaces. The botanical specimens are pasted onto the pages of large quarto- or folio-sized volumes. An initial process of triage divided the volumes into one group that would fit on the copystand, and one group that were too large. The former were photographed with a Nikon D700 camera mounted in good alignment on the copystand, which included lightbars for even illumination. The other volumes presented a challenge.
 
 \begin{figure}[!htbm]
-  \includegraphics[width=\textwidth]{figures/original.jpg}
+  \centering
+
+  \includegraphics[height=.23\textheight]{figures/original.jpg}
   \caption{Sample original image}\label{fig:original}
 \end{figure}
-
-\clearpage
 
 These were photographed with a Nikon D3x camera on a tripod; the volumes were supported by foam wedges. The tripod was weighted with exercise weights for stability, and the book, tripod, and camera were situated on an L-shaped bench. There was limited time to experiment, but the team devised an arrangement that resulted in sufficient light, good safety for the volumes being photographed, but less-than-ideal alignment of camera to page. Knowing that this alignment was imperfect, the team elected to use the camera with the higher resolution (the D3x) for these, in the hope that the greater resolution would afford greater potential for post-processing the images.
 
@@ -97,13 +97,21 @@ The perspective correction algorithm functions by applying a few steps in sequen
 \end{figure}
 
 \begin{figure}[htbm]
-  \includegraphics[width=\textwidth]{figures/Catesby_HS232_056_0602-hough-averaged.jpg}
-  \caption{Averaged lines}\label{fig:averaged}
+  \centering
+
+  \subfloat[Averaged lines]{
+  \includegraphics[height=.35\textheight]{figures/Catesby_HS232_056_0602-hough-averaged.jpg}
+  \label{fig:averaged}
+  }
+  \subfloat[Unwarped image]{
+  \includegraphics[height=.35\textheight]{figures/Catesby_HS232_056_0602-unwarped-stretch.jpg}
+  \label{fig:unwarped}
+  }
+  \caption{Final perspective processing}\label{fig:final}
 \end{figure}
 
 \begin{figure}[htbm]
-  \includegraphics[width=\textwidth]{figures/Catesby_HS232_056_0602-unwarped-stretch.jpg}
-  \caption{Unwarped image}\label{fig:unwarped}
+  
 \end{figure}
 
 \begin{enumerate}
@@ -135,11 +143,11 @@ image pre-processing.
   \centering
 
   \subfloat[Before perspective correction]{
-    \includegraphics[height=.45\textheight]{figures/snapshot-fiducial-withbg.png}
+    \includegraphics[height=.35\textheight]{figures/snapshot-fiducial-withbg.png}
     \label{fig:synthetic-before}
   }
   \subfloat[After perspective correction]{
-    \includegraphics[height=.45\textheight]{figures/snapshot-fiducial-withbg-unwarped-ar.jpg}
+    \includegraphics[height=.35\textheight]{figures/snapshot-fiducial-withbg-unwarped-ar.jpg}
     \label{fig:synthetic-after}
   }
   
@@ -153,6 +161,14 @@ we can then in turn apply our automated perspective correction algorithm to the 
 \section{Conclusions and Future Work}
 
 \section{Acknowledgments}
+
+We would like to thank the Chapter of Lichfield Cathedral for their permission in imaging the Chad gospels,
+which are used for the synthetic image results and distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. We would also like to thank (other thanks go here).
+
+This material is based in part upon work supported by the National Science Foundation under Grant Numbers
+IIS-0916421 (other grants go here).
+Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors
+and do not necessarily reflect the views of the National Science Foundation.
 
 \bibliographystyle{splncs}
 \bibliography{icadl12}
