@@ -38,12 +38,14 @@ with irregular page edges containing no regular text.
 
 \section{Background}
 
+In order to frame the problem and our need for a new approach, it may be helpful to first describe the images
+we were working with, the circumstances under which they were taken, as well as why perspective correction was desirable.
 In November of 2011, C. Blackwell and A. Hackney Blackwell photographed the botanical specimens collected in the Sloane Herbarium of the Natural History Museum, London. This was a “digitization project of opportunity”. Blackwell and Hackney Blackwell were in London working on another project, and were able to negotiate permission for this digitization at the last minute; the botanical images would complement their work on digital codicology (Blackwell) and environmental science and herbarium collections (Hackney Blackwell). The pair had one and a half working days to take as many images as possible. They had a portable conservation copystand, a tripod, and two digital cameras; the working space at the Museum was small, with limited working surfaces. The botanical specimens are pasted onto the pages of large quarto- or folio-sized volumes. An initial process of triage divided the volumes into one group that would fit on the copystand, and one group that were too large. The former were photographed with a Nikon D700 camera mounted in good alignment on the copystand, which included lightbars for even illumination. The other volumes presented a challenge.
 
 \begin{figure}[!htbm]
   \centering
 
-  \includegraphics[height=.23\textheight]{figures/original.jpg}
+  \includegraphics[height=.50\textheight]{figures/original.jpg}
   \caption{Sample original image}\label{fig:original}
 \end{figure}
 
@@ -132,12 +134,20 @@ We can then perform Hough line detection, using a probabilistic Hough transform 
 
 We can then average these lines to get the average “line” for the top and bottom page edges. We extend these lines to the image edges, and construct a quadrilateral matrix using them for the top and bottom. We then compute a destination quadrilateral matrix using the assumption that the top edge should be “brought up” to the highest point to form a straight line (while maintaining line length), and similarly for the bottom edge being brought down, forming a rectangle. We can then use these two quads to compute a perspective transform which will warp our source quadrilateral into our destination rectangle. We then apply the resulting perspective warp to the whole image, resulting in a dewarped image, as seen in Figure \ref{fig:unwarped}.
 
+Because the process currently operates with no knowledge of the camera field of view or focal length parameters,
+the aspect ratio of the final dewarped image must still be corrected. This is because although we can bring the
+edges parallel, we do not know their actual physical depth and the resulting scale needed in one direction,
+which will be affected by the camera field of view. This can be corrected using \emph{a priori} knowledge of the
+document‘s aspect ratio, or in our case we have a small ruler in the image on the page
+which we can use after perspective correction to correct the aspect ratio.
+
 \section{Results}
 
 In processing the hundreds of herbarium images which required perspective correction, almost all succeeded
 with no need for manual intervention. Occasionally, an image with some discontinuous feature in the background
 would fail the foreground/background segmentation step, but this is fairly easy to correct with some minor
-image pre-processing.
+image pre-processing. In any case, the perspective correction enables much more accurate comparative measurements
+to be made on the specimens contained in our page images.
 
 \begin{figure}[h!tbm]
   \centering
@@ -160,10 +170,20 @@ we can then in turn apply our automated perspective correction algorithm to the 
 
 \section{Conclusions and Future Work}
 
+The method described here is relatively robust and fast to perform on a large number of high-resolution images.
+For different images where assumptions exploited by this method might not hold, for example in 
+foreground/background segmentation, a different approach or altered parameters
+may need to be used for a particular step.
+
+Future work could be done in automating the aspect ratio correction after perspective correction. We plan to
+investigate if camera metadata is sufficient for using focal length and field of view parameters to perform this
+correction automatically, or performing a first pass for refinement.
+
 \section{Acknowledgments}
 
-We would like to thank the Chapter of Lichfield Cathedral for their permission in imaging the Chad gospels,
-which are used for the synthetic image results and distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License. We would also like to thank (other thanks go here).
+We would like to thank the Natural History Museum, London for permission and access in imaging items from their collection. We would also like to thank the Chapter of Lichfield Cathedral for their permission in imaging the Chad gospels,
+which are used for the synthetic image results and distributed under a Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+%We would also like to thank (other thanks go here).
 
 This material is based in part upon work supported by the National Science Foundation under Grant Numbers
 IIS-0916421 (other grants go here).
