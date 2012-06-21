@@ -74,6 +74,8 @@ cockled, uneven edges, our boundary detection needs to be relatively robust to t
 The perspective correction algorithm functions by applying a few steps in sequence:
 
 \begin{figure}[htbm]
+  \centering
+
   \subfloat[Masked image]{
     \includegraphics[width=.48\textwidth]{figures/Catesby_HS232_056_0602-masked.jpg}
     \label{fig:masked}
@@ -123,6 +125,30 @@ We can then perform Hough line detection, using a probabilistic Hough transform 
 We can then average these lines to get the average “line” for the top and bottom page edges. We extend these lines to the image edges, and construct a quadrilateral matrix using them for the top and bottom. We then compute a destination quadrilateral matrix using the assumption that the top edge should be “brought up” to the highest point to form a straight line (while maintaining line length), and similarly for the bottom edge being brought down, forming a rectangle. We can then use these two quads to compute a perspective transform which will warp our source quadrilateral into our destination rectangle. We then apply the resulting perspective warp to the whole image, resulting in a dewarped image, as seen in Figure \ref{fig:unwarped}.
 
 \section{Results}
+
+In processing the hundreds of herbarium images which required perspective correction, almost all succeeded
+with no need for manual intervention. Occasionally, an image with some discontinuous feature in the background
+would fail the foreground/background segmentation step, but this is fairly easy to correct with some minor
+image pre-processing.
+
+\begin{figure}[h!tbm]
+  \centering
+
+  \subfloat[Before perspective correction]{
+    \includegraphics[height=.45\textheight]{figures/snapshot-fiducial-withbg.png}
+    \label{fig:synthetic-before}
+  }
+  \subfloat[After perspective correction]{
+    \includegraphics[height=.45\textheight]{figures/snapshot-fiducial-withbg-unwarped-ar.jpg}
+    \label{fig:synthetic-after}
+  }
+  
+  \caption{Verifying system accuracy with synthetic page images rendered using 3D scan data. The white fiducial markers can be seen on the left and right margins of the page.}\label{fig:synthetic}
+\end{figure}
+
+In order to verify the system, we also applied it using control 3D manuscript image data we had previously acquired.
+In this case, we had accurate, metrically calibrated, 3D surfaces and corresponding texture data for an ancient manuscript. By placing synthetic 1cm measurement fiducials on the surface and rendering it in a scene with perspective distortion,
+we can then in turn apply our automated perspective correction algorithm to the rendered image to verify its accuracy. For the image shown in Figure \ref{fig:synthetic}, the 1cm fiducials are 144px and 111px before correction, and both measure 153px after correction.
 
 \section{Conclusions and Future Work}
 
